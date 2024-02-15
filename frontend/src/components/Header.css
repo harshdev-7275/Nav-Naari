@@ -1,0 +1,17 @@
+.input-label {
+    border-bottom: 2px solid #25316D;
+    outline: none;
+    color: #25316D;
+    font-size: 30px;
+    transition: all 0.1s ease-in-out; /* Added transition for smooth animation */
+}
+
+.email-label {
+    font-size: 20px;
+    top: 18px;
+}
+
+.email-label-animation {
+    top: -55px;
+    font-size: 25px;
+}
