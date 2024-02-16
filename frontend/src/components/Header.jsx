@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Header = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [logoutClicked, setLogoutClicked] = useState(false);
+    const navigate = useNavigate(null);
 
 
     useEffect(() => {
@@ -19,11 +20,11 @@ const Header = () => {
     const logoutHandler = async (e)=>{
        
        const data =  await axios.post("http://localhost:7000/api/auth/logout")
-       console.log(userInfo);
        setUserInfo(null)
        localStorage.removeItem('userInfo')
        toast.success("Logout Successfully")
        setLogoutClicked(!logoutClicked);
+       navigate("/")
        
     }
     
@@ -38,7 +39,7 @@ const Header = () => {
         <ul className='text-lg text-[#25316D] flex items-center justify-center gap-8 font-semibold'>
             <li><Link to="/">Home</Link></li>
             <li><Link to="/">Hire a talent</Link></li>
-            <li><Link to="/">Apply For Jobs</Link></li>
+            <li><Link to="/apply">Apply For Jobs</Link></li>
         </ul>
         <button className='px-20 py-5 bg-[#25316D] text-white text-lg'>
     {userInfo ? <Link to="" onClick={logoutHandler}>Logout</Link> : <Link to="/login">Log In</Link>}

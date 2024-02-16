@@ -4,6 +4,9 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import Layout from './layout/Layout'
 import Hero from './components/Hero'
 import Login from './components/Login'
+import ApplyJobs from "./components/ApplyJobs"
+import WorkerProfile from './components/WorkerProfile'
+import Register from './components/Register'
 
 const App = () => {
   return (
@@ -16,7 +19,13 @@ const App = () => {
           <Login/>
         </Layout>} />
         <Route path='/register' element={<Layout>
-          <p>Register</p>
+          <Register/>
+        </Layout>} />
+        <Route path='/apply' element={<Layout>
+          <ApplyJobs/>
+        </Layout>} />
+        <Route path='/workerprofile' element={<Layout>
+          <WorkerProfile/>
         </Layout>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

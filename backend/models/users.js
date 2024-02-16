@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true,
         unique: true
+    },
+    isWorker:{
+        type:Boolean,
+        required: false,
+        default: false
     }
 });
 

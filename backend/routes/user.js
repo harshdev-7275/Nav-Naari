@@ -42,12 +42,43 @@ router.post("/register", [
             name: newUser.name,
             isWorker: newUser.isWorker,
             location: newUser.location,
-            phoneNumber: newUser.phoneNumber
+            phoneNumber: newUser.phoneNumber,
+            
         });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Internal Server Error" });
     }
 });
+
+
+
+router.post("/createWorker", async (req, res) => {
+    try {
+        const {email} = req.body; 
+        const user = await User.findOne({email});
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+        user.isWorker = true;
+        const updated = await user.save();
+        return res.status(200).json({
+            _id: updated._id,
+            email: updated.email,
+            name: updated.name,
+            isWorker: updated.isWorker,
+            location: updated.location,
+            phoneNumber: updated.phoneNumber,
+            isWorker: updated.isWorker,
+        });
+       
+    } catch (error) {
+        console.log(error);
+    }
+    
+    
+
+})
+
 
 export default router;
