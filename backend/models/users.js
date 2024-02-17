@@ -30,11 +30,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    isWorker:{
-        type:Boolean,
-        required: false,
-        default: false
-    }
+    
 });
 
 userSchema.pre("save", async function(next){

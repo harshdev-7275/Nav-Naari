@@ -38,7 +38,7 @@ const Header = () => {
     <div className='flex items-center justify-center gap-20'>
         <ul className='text-lg text-[#25316D] flex items-center justify-center gap-8 font-semibold'>
             <li><Link to="/">Home</Link></li>
-            <li><Link to="/">Hire a talent</Link></li>
+            <li><Link to="/hireworker">Hire a talent</Link></li>
             <li><Link to="/apply">Apply For Jobs</Link></li>
         </ul>
         <button className='px-20 py-5 bg-[#25316D] text-white text-lg'>

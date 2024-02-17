@@ -53,13 +53,14 @@ const ApplyJobs = () => {
             setIsWorker(true);
             setUserInfo(data);
             localStorage.setItem("userInfo", JSON.stringify(data));
+            navigate("/createWorkerProfile")
         } catch (error) {
             console.log(error);
         }
     }
 
     return (
-        <div className={`max-w-[1400px] mx-auto mt-20 ${!isWorker? "h-[53.9vh]":""}`}>
+        <div className={`max-w-[1400px] mx-auto mt-20 ${!isWorker? "h-[64.7vh]":""}`}>
             <div className="container py-4 flex flex-col items-center justify-center"> 
                {isWorker === false ? 
                     <div className='text-3xl text-[#25316D] font-bold flex flex-col items-center gap-10 '>
