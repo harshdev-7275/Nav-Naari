@@ -27,7 +27,7 @@ router.post("/login", [
             return res.status(400).json({ message: "Invalid Credentials!" });
         }
         
-        const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: "1d" });
+        const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: "1d" }); //setup cookie
         res.cookie("auth", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",

@@ -6,7 +6,7 @@ import Worker from "../models/workers.js";
 const router = express.Router();
 
 router.get('/getSingleWorker',async (req, res)=>{
-    console.log("hell");
+    
     try {
         const id = req.query.id;
         console.log(id);

@@ -18,11 +18,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));  
 app.use(cors());
 
-app.use("/api/users", userRoutes)
-app.use("/api/workers/get", getAllWorkers)
-app.use("/api/workers/getSingle", getSingleWorker)
-app.use("/api/workers", workerRoutes)
-app.use("/api/auth", authRoutes)
+app.use("/api/users", userRoutes) //for user creation routes
+app.use("/api/workers/get", getAllWorkers) // to view all worker
+app.use("/api/workers/getSingle", getSingleWorker) // to view single worker
+app.use("/api/workers", workerRoutes) //create worker schema
+app.use("/api/auth", authRoutes) //for authentication
 
 app.listen(process.env.PORT||5000, ()=>{
     console.log(`Server is running ${process.env.PORT}`);

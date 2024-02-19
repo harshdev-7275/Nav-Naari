@@ -27,19 +27,31 @@ const WorkerHireProfile = () => {
             <div className='py-10'>
                 {workerInfo && (
                     <div>
-                        <div className="flex items-center gap-10">
-                            <div className='w-60 h-60 border-2 border-[#25316D] p-2 rounded-full'>
+                        <div className="flex justify-between items-center gap-10">
+                            <div className='flex items-center gap-20'>
+                                <div className='w-60 h-60 border-2 border-[#25316D] p-2 rounded-full'>
                                 <img src={"https://media.istockphoto.com/id/1407759041/photo/confident-happy-beautiful-hispanic-student-girl-indoor-head-shot-portrait.jpg?s=2048x2048&w=is&k=20&c=eskue6p9gwUVS2t0Kpuw6rd7Sgu5nKgxsMD6Aqaba8I="} className='w-full rounded-full h-full object-cover' alt={workerInfo.name} />
                             </div>
+                           <div className='flex items-center gap-36 justify-between'>
                             <div className='text-3xl flex flex-col gap-3'>
-                                <h1 className='font-semibold'>{workerInfo.name}</h1>
-                                <p className='font-semibold'>{workerInfo.email}</p>
-                                <p className='font-semibold'>{workerInfo.location}</p>
+                                    <h1 className='font-semibold'>{workerInfo.name}</h1>
+                                    <p className='font-semibold'>{workerInfo.email}</p>
+                                    <p className='font-semibold'>{workerInfo.location}</p>
+                                </div>
+                               
+                           </div>
                             </div>
-                            <div className='flex items-center gap-2'>
-                                <div className='w-[10px] h-[10px] bg-green-600 rounded-full'></div>
-                                <div>Available</div>
-                            </div>
+                           <div>
+                           <div className='font-semibold text-3xl flex flex-col items-start'>
+                                   
+                                     <h1>{workerInfo.profession}</h1>
+                                     <div className='flex items-center gap-2'>
+                                     <div className='w-[10px] h-[10px] bg-green-600 rounded-full'></div>
+                                     <h1>Available</h1>
+                                     </div>
+                                </div>
+                           </div>
+                           
                         </div>
                     </div>
                 )}

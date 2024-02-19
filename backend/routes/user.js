@@ -2,33 +2,35 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import { check, validationResult } from "express-validator";
 import User from "../models/users.js";
+import bcrypt from "bcryptjs"
 
 const router = express.Router();
 
-router.post("/register", [
-    check("name", "Name is required").notEmpty().isString(),
-    check("email", "Please provide a valid email").isEmail(),
-    check("password", "Password must be at least 6 characters long").isLength({ min: 6 }),
-    check("location", "Location is required and must be one of Banshankari, RR Nagar, or JP Nagar").isIn(['Banshankari', 'RR Nagar', 'JP Nagar']),
-    check("phoneNumber", "Phone number is required and must be unique").isNumeric().notEmpty().custom(async (value, { req }) => {
-        const existingUser = await User.findOne({ phoneNumber: value });
-        if (existingUser) {
-            throw new Error("Phone number already exists");
-        }
-    })
-], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+router.post("/register", async (req, res) => {
+    
+   
     try {
+        
         let user = await User.findOne({ email: req.body.email });
+
+        const {email,name, password, location, phoneNumber} = req.body
+        
         if (user) {
             return res.status(400).json({ message: "Email already exists" });
         }
-        user = new User(req.body);
-        const newUser = await user.save();
-        const token = jwt.sign({ userId: user.id }, process.env.SECRET_KEY, {
+        
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const newUser = new User({
+            email,
+            name,
+            password: hashedPassword,
+            location,
+            phoneNumber
+        });
+        await newUser.save();
+        console.log(newUser);
+        const token = jwt.sign({ userId: newUser.id }, process.env.SECRET_KEY, {
             expiresIn: "1d"
         });
         res.cookie("auth", token, {

@@ -11,7 +11,7 @@ router.get("/getAllWorkers", async (req, res) => {
 
         // Check if profession parameter exists in query
         if (req.query.profession) {
-            query.profession = req.query.profession;
+            query.profession = req.query.profession; //cooking
         }
 
         // Check if location parameter exists in query and validate it against enum values
