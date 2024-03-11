@@ -18,8 +18,10 @@ import { FaCheck } from "react-icons/fa";
 
 
 const ApplyJobs = () => {
+    const [enquiries, setEnquiries] = useState([]);
     const [userInfo, setUserInfo] = useState(null);
     const [isWorker, setIsWorker] = useState(false);
+    const [loading, setLoading] = useState(true);
     
     useEffect(() => {
         const storedUserInfo = localStorage.getItem("userInfo");
@@ -27,37 +29,51 @@ const ApplyJobs = () => {
             const parsedUserInfo = JSON.parse(storedUserInfo);
             setUserInfo(parsedUserInfo);
             checkWorker(parsedUserInfo);
-        }   
+        }
+        fetchEquiry();
     }, []);
+
+    const fetchEquiry = async () => {
+        try {
+            let receiver = userInfo?.email;
+            const res = await axios.get("http://localhost:7000/api/message/getSingleMessage", {
+                params: { receiver: receiver }
+            });
+            setEnquiries(res.data.messages);
+            setLoading(false); // Set loading to false once data is fetched
+        } catch (error) {
+            console.log(error);
+            setLoading(false); // Set loading to false even if there's an error
+        }
+    }
 
     const navigate = useNavigate();
 
     const checkWorker = (userInfo) => {
         if (userInfo) {
-            // Check if the user is a worker and navigate accordingly
             if (userInfo.isWorker) {
                 setIsWorker(true);
-            } 
+            }
         } else {
-            navigate("/")
+            navigate("/");
         }
     }
 
     const applyWorker = async (e) => {
         e.preventDefault();
-        if(!localStorage.getItem("userInfo")) navigate("/login")
+        if (!localStorage.getItem("userInfo")) navigate("/login");
         try {
             const { data } = await axios.post("http://localhost:7000/api/users/createWorker", { email: userInfo.email });
-            console.log(data);
             toast.success("Now You Are a Nav-Naari");
             setIsWorker(true);
             setUserInfo(data);
             localStorage.setItem("userInfo", JSON.stringify(data));
-            navigate("/createWorkerProfile")
+            navigate("/createWorkerProfile");
         } catch (error) {
             console.log(error);
         }
     }
+    
 
     return (
         <div className={`max-w-[1400px] mx-auto mt-20 ${!isWorker? "h-[64.7vh]":""}`}>
@@ -75,7 +91,7 @@ const ApplyJobs = () => {
                             <div >
                                     <h1 className='text-4xl font-semibold'>{userInfo.name}</h1>
                                 <p className='text-md'>{userInfo.email}</p>
-                                <p className='text-xl font-semibold'>Specialization: Cooking</p>
+                                <p className='text-xl font-semibold'>Specialization: </p>
                             </div>
                             <div className='absolute left-[5rem] top-5 w-[10px] h-[10px] rounded-full bg-green-400'></div>
                             
@@ -104,24 +120,26 @@ const ApplyJobs = () => {
                                 <h1 className='text-3xl font-semibold'>New Work</h1>
                             </div>
                             <div className='mt-7 ml-4 flex flex-col gap-10'>
-                                <div className='bg-[#eee] cursor-pointer px-4 py-4 flex items-center justify-between rounded-md shadow-md hover:scale-105 delay-150 transition-transform'>
-                                    <div>
-                                        <h1> Cooking Dinner</h1>
-                                        <p>Location: PES University</p>
-                                    </div>
-                                    <div className='flex flex-col items-center gap-3'>
-                                        <div>
-                                            <p>Timing : 9:30AM </p>
+                                {loading ? (
+                                    <p>Loading...</p>
+                                ) : enquiries.length > 0 ? (
+                                    enquiries.map((enquiry) => (
+                                        <div key={enquiry._id} className='bg-[#eee] cursor-pointer px-4 py-4 rounded-md shadow-md hover:scale-105 delay-150 transition-transform flex items-center justify-between'>
+                                            <div className='flex flex-col'>
+                                                <h1 className='text-lg font-semibold'>Sender: <span className='text-[#25316D]'>{enquiry?.sender}</span></h1>
+                                                <h1>{enquiry.message}</h1>
+                                            </div>
+                                            <div className='flex items-center gap-3'>
+                                                <button className='bg-green-500 text-white px-2 rounded shadow shadow-black'>Reply</button>
+                                                <button className='bg-red-500 text-white px-2 rounded shadow shadow-black'>Delete</button>
+                                            </div>
                                         </div>
-                                        <div className='text-white flex gap-4 text-center'>
-                                            <button className='bg-green-600 px-4'>Yes</button>
-                                            <button className='bg-red-600 px-4'>No</button>
-                                        </div>
-                                    </div>
-                                   
-                                </div>
+                                    ))
+                                ) : (
+                                    <p>No new enquiries</p>
+                                )}
                             </div>
-                       </div>
+                        </div>
                        <div className='mt-12 text-black'>
                            <div>
                                 <h1 className='text-3xl font-semibold'>Previous Works</h1>
