@@ -13,10 +13,6 @@ import { FaCheck } from "react-icons/fa";
 
 
 
-
-
-
-
 const ApplyJobs = () => {
     const [enquiries, setEnquiries] = useState([]);
     const [userInfo, setUserInfo] = useState(null);
@@ -32,14 +28,19 @@ const ApplyJobs = () => {
         }
         fetchEquiry();
     }, []);
+   
+    
 
     const fetchEquiry = async () => {
+        let receiver = userInfo?.email;
+        console.log("dad",receiver);
         try {
-            let receiver = userInfo?.email;
+            
             const res = await axios.get("http://localhost:7000/api/message/getSingleMessage", {
                 params: { receiver: receiver }
             });
             setEnquiries(res.data.messages);
+            console.log(res);
             setLoading(false); // Set loading to false once data is fetched
         } catch (error) {
             console.log(error);
@@ -74,6 +75,25 @@ const ApplyJobs = () => {
         }
     }
     
+
+    const deleteMsg = async (id, e) => {
+        
+        try {
+            console.log(id);
+           const res =  await axios.post("http://localhost:7000/api/message/deleteSingleMessage", {
+                id
+            });
+            console.log(res);
+            toast.success("Message deleted successfully");
+            navigate("/apply")
+            // Call fetchEquiry after successful deletion
+            fetchEquiry();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+
 
     return (
         <div className={`max-w-[1400px] mx-auto mt-20 ${!isWorker? "h-[64.7vh]":""}`}>
@@ -131,7 +151,7 @@ const ApplyJobs = () => {
                                             </div>
                                             <div className='flex items-center gap-3'>
                                                 <button className='bg-green-500 text-white px-2 rounded shadow shadow-black'>Reply</button>
-                                                <button className='bg-red-500 text-white px-2 rounded shadow shadow-black'>Delete</button>
+                                                <button className='bg-red-500 text-white px-2 rounded shadow shadow-black' onClick={() => deleteMsg(enquiry?._id)}>Delete</button>
                                             </div>
                                         </div>
                                     ))

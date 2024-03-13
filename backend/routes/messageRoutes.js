@@ -36,9 +36,30 @@ router.get("/getSingleMessage", async(req, res)=>{
             })
         }
         const messages = await Message.find({receiver});
+        console.log(messages);
         res.status(200).json({ messages: messages });
     } catch (error) {
         console.log(error);
     }
 })
+
+router.post("/deleteSingleMessage", async(req, res)=>{
+    try {
+        const {id} = req.body;
+        console.log(id);
+        if(!id){
+            return res.status(400).json({
+                message:"Please provide a message id"
+            })
+        }
+        const message = await Message.findByIdAndDelete(id);
+        console.log(message);
+        res.status(200).json({ message: "Message deleted successfully" });
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
+
 export default router
