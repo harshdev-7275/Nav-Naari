@@ -43,7 +43,7 @@ const HireWorker = () => {
   }, [selectedProfession, selectedLocation]);
 
   return (
-    <div className='mt-20 max-w-[1200px] mx-auto py-4 px-3'>
+    <div className='mt-20 max-w-[1200px] min-h-[712px] mx-auto py-4 px-3'>
       <div className="container flex flex-col gap-5">
         <div>
           <h1 className='text-5xl text-[#25316D] font-semibold'>Hire A Nav-Naari</h1>
@@ -95,7 +95,7 @@ const HireWorker = () => {
                       <h1 className="text-transform: uppercase font-bold text">{worker.profession}</h1>
                     </div>
                     <div>
-                      <Link to={`/workerhireddashboard/${worker._id}`} className='bg-[#25316D] text-white px-7 py-2 text-xl font-semibold'>View</Link>
+                      <Link to={`/workerhireddashboard/${worker.user}`} className='bg-[#25316D] text-white px-7 py-2 text-xl font-semibold'>View</Link>
                     </div>
                   </div>
               </div>

@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import { check, validationResult } from "express-validator";
 import User from "../models/users.js";
 import bcrypt from "bcryptjs"
+import Booking from "../models/bookingSchema.js";
+import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -29,7 +31,7 @@ router.post("/register", async (req, res) => {
             phoneNumber
         });
         await newUser.save();
-        console.log(newUser);
+        // console.log(newUser);
         const token = jwt.sign({ userId: newUser.id }, process.env.SECRET_KEY, {
             expiresIn: "1d"
         });
@@ -47,6 +49,19 @@ router.post("/register", async (req, res) => {
             phoneNumber: newUser.phoneNumber,
             
         });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+router.get("/getUser/:userId", async (req, res) => {
+    try {
+        const userId = req.params.userId; // Use req.params to access the userId parameter
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        return res.status(200).json(user);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Internal Server Error" });
@@ -76,11 +91,83 @@ router.post("/createWorker", async (req, res) => {
        
     } catch (error) {
         console.log(error);
+        res.status(500).json({ message: "Internal server error" });
     }
     
     
 
 })
+
+router.put("/updateBooking", async (req, res) => {
+    try {
+        const {bookingId} = req.body;
+        console.log(bookingId);
+        const booking = await Booking.findById(bookingId);
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }
+        booking.isAccept = true;
+        const updated = await booking.save();
+        return res.status(200).json({
+            message: "Booking updated successfully",
+            booking: updated
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+        
+    }
+})
+
+
+router.post("/book", async (req, res) => {
+    try {
+        const { userId:user, workerId:worker, date, time } = req.body;
+
+        // Validate userId and workerId (assuming they are valid ObjectId)
+        if (!mongoose.Types.ObjectId.isValid(user) || !mongoose.Types.ObjectId.isValid(worker)) {
+            return res.status(400).json({ message: "Invalid user or worker ID" });
+        }
+
+        // Create a new booking
+        const booking = {user, worker, date, time };
+
+        // Save the new booking
+        const newBooking = await Booking.create(booking);
+
+        // Respond with the new booking information
+        return res.status(200).json({
+            message: "Booking created successfully",
+            booking: newBooking
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+router.get("/bookings", async (req, res) => {
+    try {
+        const userId = req.query.userId;
+        const workerId = req.query.workerId;
+        // console.log("fetching bookings", userId, workerId);
+   
+        // Validate userId and workerId (assuming they are valid ObjectId)
+        if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(workerId)) {
+            return res.status(400).json({ message: "Invalid user or worker ID" });
+        }
+
+        // Find all bookings for the given user ID and worker ID
+        const bookings = await Booking.find({ user: userId, worker: workerId });
+        console.log(bookings);
+
+        // Respond with the bookings
+        return res.status(200).json(bookings);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
 
 
 export default router;

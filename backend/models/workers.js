@@ -1,11 +1,16 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
+
 
 const workerSchema = new mongoose.Schema({
+   
     email: {
         type: String,
         required: true,
         unique: true
+    },
+    image:{
+        type:String,
+        trim:true
     },
     name: {
         type: String,
@@ -32,7 +37,8 @@ const workerSchema = new mongoose.Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required:true
     }
 });
 

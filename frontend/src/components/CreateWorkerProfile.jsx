@@ -25,17 +25,21 @@ const CreateWorkerProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Send formData to the backend to create the worker profile
-            await axios.post('http://localhost:7000/api/workers/createWorkerProfile', formData);
+            const userId = JSON.parse(localStorage.getItem("userInfo"))._id;
+            // Send formData directly as the request body
+            await axios.post('http://localhost:7000/api/workers/createWorkerProfile', {
+                ...formData,
+                userId: userId
+            });
             console.log('Worker profile created successfully');
-            setTimeout(()=>{
-                navigate("/apply")
-            }, 1000)
+            setTimeout(() => {
+                navigate("/apply");
+            }, 1000);
         } catch (error) {
             console.error('Error creating worker profile:', error);
         }
     };
-
+    
     return (
         <div className='my-32 max-w-[1200px] mx-auto flex flex-col items-center justify-center text-[#25316D]'>
             <h1 className="text-4xl font-bold mb-8">Create Worker Profile</h1>

@@ -16,7 +16,7 @@ router.get('/getSingleWorker',async (req, res)=>{
             })
         }
 
-        const worker = await Worker.findById(id);
+        const worker = await Worker.findOne({user:id});
         console.log(worker);
         res.status(200).json(worker);
     } catch (error) {

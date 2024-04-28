@@ -17,14 +17,17 @@ const app = express();
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));  
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}));
 
 app.use("/api/users", userRoutes) //for user creation routes
 app.use("/api/workers/get", getAllWorkers) // to view all worker
 app.use("/api/workers/getSingle", getSingleWorker) // to view single worker
 app.use("/api/workers", workerRoutes) //create worker schema
 app.use("/api/auth", authRoutes) //for authentication
-app.use("/api/message",messageRoute)
+// app.use("/api/message",messageRoute)
 
 app.listen(process.env.PORT||5000, ()=>{
     console.log(`Server is running ${process.env.PORT}`);
