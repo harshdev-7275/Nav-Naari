@@ -134,3 +134,4 @@ const PostModal = ({ setIsPostModalOn, id }: PostModalProps) => {
 };
 
 export default PostModal;
+MONGODB_URI=mongodb+srv://harsh727533:harsh727533@mern-booking-app.hfbonxj.mongodb.net/nav-naari?retryWrites=true&w=majority&appName=mern-booking-app
